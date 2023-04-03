@@ -1,2 +1,3 @@
-# iOS-CollectionView-layouts
-Several custom layouts for UICollectionView
+# Collection-View-Layouts
+
+A description of this package.

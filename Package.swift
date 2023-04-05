@@ -11,8 +11,8 @@ let package = Package(
     products: [
 
         .library(
-            name: "Collection-View-Layouts",
-            targets: ["Collection-View-Layouts"]),
+            name: "Infinite",
+            targets: ["Infinite"]),
     ],
     dependencies: [
 
@@ -20,7 +20,7 @@ let package = Package(
     targets: [
  
         .target(
-            name: "Collection-View-Layouts",
+            name: "Infinite",
             dependencies: [])
     ]
 )

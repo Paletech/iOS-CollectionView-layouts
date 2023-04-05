@@ -13,9 +13,9 @@ Initialize the `InfiniteCollectionView` and add it to the view hierarchy:
  view.addSubview(collectionView)
  ````
  
-Set up a section with a custom layout, data, cell type, and cell configuration:
+Append a section with a custom layout, data, cell type, and cell configuration:
  ````
- collectionView.setup(Model(layout: createActiveChatSection(),
+ collectionView.append(SectionDataSource(layout: createActiveChatSection(),
                             data: sections[1].items,
                             infinite: false,
                             cell: ActiveChatCell.self,
@@ -25,7 +25,7 @@ Set up a section with a custom layout, data, cell type, and cell configuration:
  
  Add another section with a different layout, data, cell type, and cell configuration:
  ````
- collectionView.setup(Model(layout: createAnotherSectionLayout(),
+ collectionView.append(SectionDataSource(layout: createAnotherSectionLayout(),
                             data: anotherDataArray,
                             infinite: false,
                             cell: AnotherCustomCell.self) { item, cell in
@@ -35,7 +35,7 @@ Set up a section with a custom layout, data, cell type, and cell configuration:
  */
 open class InfiniteCollectionView: UICollectionView, UICollectionViewDataSource {
     
-    private var sections: [AnySectionModel] = []
+    private var sections: [AnySectionDataSource] = []
     private var layout: UICollectionViewCompositionalLayout!
     
     convenience init(frame: CGRect) {
@@ -67,12 +67,35 @@ open class InfiniteCollectionView: UICollectionView, UICollectionViewDataSource 
        - cell: The type of `UICollectionViewCell` to be used in the section.
        - configureCell: A closure that takes an item of type `T` and a cell of type `Cell` and configures the cell with the item.
      */
-    public func setup<T: Hashable, Cell: UICollectionViewCell>(_ sectionModel: Model<T, Cell>) {
-        let anyModel = AnySectionModel(sectionModel)
+    public func append<T: Hashable, Cell: UICollectionViewCell>(_ sectionModel: SectionDataSource<T, Cell>) {
+        let anyModel = AnySectionDataSource(sectionModel)
         sections.append(anyModel)
         register(anyModel.cellType, forCellWithReuseIdentifier: String(describing: anyModel.cellType))
         updateLayout()
         scrollToMiddle()
+    }
+    
+    /**
+        Removes section at specified index
+     */
+    public func remove(at index: Int) {
+        sections.remove(at: index)
+        updateLayout()
+    }
+    
+    /**
+        Reloads data at specified section 
+     */
+    public func reloadSection(_ section: Int) {
+        collectionViewLayout.invalidateLayout()
+        reloadSections(IndexSet(integer: section))
+    }
+    
+    /**
+        Reload collectionView
+     */
+    public func reload() {
+        reloadData()
     }
     
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -82,19 +105,11 @@ open class InfiniteCollectionView: UICollectionView, UICollectionViewDataSource 
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let sectionData = sections[section]
         
-        if sectionData.infinite {
-            return sectionData.data.count * 1000
+        if let imitateInfinityCount = sectionData.imitateInfinityCount {
+            return sectionData.data.count * imitateInfinityCount
         } else {
             return sectionData.data.count
         }
-    }
-    
-    public func scrollToMiddle(animated: Bool = false) {
-        guard let firstSection = sections.first, firstSection.infinite else { return }
-        
-        let middleIndex = firstSection.data.count * 1000 / 2
-        let middleIndexPath = IndexPath(item: middleIndex, section: 0)
-        scrollToItem(at: middleIndexPath, at: .centeredHorizontally, animated: animated)
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -103,6 +118,16 @@ open class InfiniteCollectionView: UICollectionView, UICollectionViewDataSource 
         let item = sectionModel.data[indexPath.item % sectionModel.data.count]
         sectionModel.configureCell(item, cell)
         return cell
+    }
+    
+    // MARK: - Private
+    
+    private func scrollToMiddle(animated: Bool = false) {
+        guard let firstSection = sections.first, let imitateInfinityCount = firstSection.imitateInfinityCount else { return }
+
+        let middleIndex = firstSection.data.count * imitateInfinityCount / 2
+        let middleIndexPath = IndexPath(item: middleIndex, section: 0)
+        scrollToItem(at: middleIndexPath, at: .centeredHorizontally, animated: animated)
     }
     
     private func updateLayout() {

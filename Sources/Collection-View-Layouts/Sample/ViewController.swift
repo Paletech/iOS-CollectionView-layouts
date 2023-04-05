@@ -16,8 +16,8 @@ class ViewController: UIViewController {
     func setupCollectionView() {
         collectionView = InfiniteCollectionView(frame: view.bounds)
         
-        collectionView.setup(viewModel!.getFirstModel())
-        collectionView.setup(viewModel!.getSecondModel())
+        collectionView.append(viewModel!.getFirstModel())
+        collectionView.append(viewModel!.getSecondModel())
         
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = #colorLiteral(red: 0.968627451, green: 0.9725490196, blue: 0.9921568627, alpha: 1)

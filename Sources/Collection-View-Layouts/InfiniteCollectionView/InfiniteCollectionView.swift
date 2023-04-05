@@ -84,7 +84,7 @@ open class InfiniteCollectionView: UICollectionView, UICollectionViewDataSource 
     }
     
     /**
-        Reloads data at specified section 
+        Reloads data specified section at specified index
      */
     public func reloadSection(_ section: Int) {
         collectionViewLayout.invalidateLayout()

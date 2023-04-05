@@ -23,10 +23,11 @@ public class SectionDataSource<T: Hashable, Cell: UICollectionViewCell> {
 public class AnySectionDataSource {
     let layout: NSCollectionLayoutSection
     let cellType: UICollectionViewCell.Type
-    let data: [AnyHashable]
+    var data: [AnyHashable]
     let imitateInfinityCount: Int?
     private let _configureCell: (AnyHashable, UICollectionViewCell) -> Void
-    
+    var isPrependingData: Bool = false
+
     public init<T: Hashable, Cell: UICollectionViewCell>(_ model: SectionDataSource<T, Cell>) {
         self.layout = model.layout
         self.cellType = model.cellType

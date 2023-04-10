@@ -8,19 +8,20 @@ let package = Package(
     platforms: [
         .iOS(.v16)
     ],
+    
     products: [
-
         .library(
-            name: "Infinite",
-            targets: ["Infinite"]),
+            name: "Layouts",
+            targets: ["Layouts"]),
     ],
+    
     dependencies: [
 
     ],
+    
     targets: [
- 
         .target(
-            name: "Infinite",
-            dependencies: [])
+            name: "Layouts",
+            dependencies: []),
     ]
 )

@@ -190,3 +190,5 @@ class AlignedViewController: UIViewController, UICollectionViewDataSource, UICol
     }
 }
 ```
+
+<hr color="red" size="5">

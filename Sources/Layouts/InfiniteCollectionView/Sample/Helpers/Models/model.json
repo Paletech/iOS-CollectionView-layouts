@@ -1,0 +1,66 @@
+[
+	{
+		"type": "waitingChats",
+		"title": "Waiting",
+		"subtitle": "",
+		"items": [
+			{
+				"friendName": "Bob River",
+				"friendImage": "human1",
+				"lastMessage": "How are you?"
+			},
+			{
+				"friendName": "John Black",
+                "friendImage": "human2",
+                "lastMessage": "Where are you?"
+			},
+			{
+				"friendName": "Misha Red",
+                "friendImage": "human3",
+                "lastMessage": "Who are you?"
+			},
+			{
+				"friendName": "Alex Film",
+                "friendImage": "human4",
+                "lastMessage": "How old are you?"
+			},
+			{
+				"friendName": "Robert Martin",
+                "friendImage": "human5",
+                "lastMessage": "Where are we?"
+			}
+		]
+	},
+    {
+        "type": "activeChats",
+        "title": "Waiting",
+        "subtitle": "",
+        "items": [
+            {
+                "friendName": "Bob River",
+                "friendImage": "human1",
+                "lastMessage": "How are you?"
+            },
+            {
+                "friendName": "John Black",
+                "friendImage": "human2",
+                "lastMessage": "Where are you?"
+            },
+            {
+                "friendName": "Misha Red",
+                "friendImage": "human3",
+                "lastMessage": "Who are you?"
+            },
+            {
+                "friendName": "Alex Film",
+                "friendImage": "human4",
+                "lastMessage": "How old are you?"
+            },
+            {
+                "friendName": "Robert Martin",
+                "friendImage": "human5",
+                "lastMessage": "Where are we?"
+            }
+        ]
+    }
+]

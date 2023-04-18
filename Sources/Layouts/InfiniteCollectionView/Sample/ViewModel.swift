@@ -1,4 +1,3 @@
-import Collection_View_Layouts
 import Foundation
 
 class ViewModel {

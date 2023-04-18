@@ -8,26 +8,49 @@
 
 import UIKit
 
-class TagCollectionViewCell: UICollectionViewCell, SizableText {
+class TagCollectionViewCell: UICollectionViewCell {
+        
+    let view: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
-    @IBOutlet weak var view: UIView!
-    @IBOutlet weak var titleLabel: UILabel!
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        self.view.layer.cornerRadius = 20/2
-    }
-    
-    func config(info: String) {
-        self.titleLabel.text = info
-    }
-    
-    static func preferredSize(for text: String) -> CGSize {
-        let horizontalPadding: CGFloat = 40.0
-        let verticalPadding: CGFloat = 15.0
+    let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = text
-        return CGSize(width: label.intrinsicContentSize.width + horizontalPadding,
-                      height: label.intrinsicContentSize.height + verticalPadding)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        buildHierarchy()
+        setupView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func config<Decorator: TagDecorator>(info: String, decorator: Decorator) {
+        self.titleLabel.text = info
+        decorator.applyDecoration(to: self)
+    }
+    
+    private func buildHierarchy() {
+        contentView.addSubview(view)
+        view.addSubview(titleLabel)
+    }
+    
+    private func setupView() {
+        NSLayoutConstraint.activate([
+            view.topAnchor.constraint(equalTo: contentView.topAnchor),
+            view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            titleLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
 }

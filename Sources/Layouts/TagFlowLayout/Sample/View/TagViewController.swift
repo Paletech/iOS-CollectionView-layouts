@@ -7,8 +7,9 @@
 
 import UIKit
 
-class TagViewController: UIViewController {
+public class TagViewController: UIViewController {
     var collectionView: UICollectionView!
+    
     var tags: [String] = [
         "Stellar Voyage",
         "Wanderlust",
@@ -35,35 +36,40 @@ class TagViewController: UIViewController {
         "Lie",
     ]
     
-    override func viewDidLoad() {
+    let decorator = TagDecoratorImpl()
+    
+    public override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
     }
     
     func setupCollectionView() {
-        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: TagLayout())
+        let layout = TagLayout(decorator: decorator, xOffset: 0, yOffset: 0, spacing: 15)
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
+
+        layout.dataSource = self
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(UINib(nibName: "TagCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "default")
-        tags = collectionView.sortedTagsBasedOnCellSize(tags, cellType: TagCollectionViewCell.self)
+        collectionView.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: "cellOne")
 
         view.addSubview(collectionView)
     }
 }
 
 extension TagViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.tags.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "default", for: indexPath) as! TagCollectionViewCell
-        cell.config(info: tags[indexPath.item])
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellOne", for: indexPath) as! TagCollectionViewCell
+        cell.config(info: tags[indexPath.item], decorator: decorator)
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let tag = tags[indexPath.item]
-        return TagCollectionViewCell.preferredSize(for: tag)
+}
+
+extension TagViewController: TagDataSource {
+    func tag(at indexPath: IndexPath) -> String {
+        return tags[indexPath.item]
     }
 }

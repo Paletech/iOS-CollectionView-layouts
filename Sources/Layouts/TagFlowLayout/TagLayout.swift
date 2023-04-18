@@ -8,10 +8,29 @@
 
 import UIKit
 
-class TagLayout: UICollectionViewFlowLayout {
+class TagLayout<Decorator: TagDecorator>: UICollectionViewFlowLayout {
     private var layoutAttributes: [UICollectionViewLayoutAttributes] = []
     private var contentWidth: CGFloat = 0.0
     private var contentHeight: CGFloat = 0.0
+    private let decorator: Decorator
+    
+    private var xOffset: CGFloat
+    private var yOffset: CGFloat
+    private var spacing: CGFloat
+    
+    weak var dataSource: TagDataSource?
+    
+    init(decorator: Decorator, xOffset: CGFloat = 0, yOffset: CGFloat = 0, spacing: CGFloat = 8) {
+        self.decorator = decorator
+        self.xOffset = xOffset
+        self.yOffset = yOffset
+        self.spacing = spacing
+        super.init()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func prepare() {
         guard let collectionView = collectionView else { return }
@@ -21,13 +40,15 @@ class TagLayout: UICollectionViewFlowLayout {
         contentHeight = 0.0
         
         let numberOfItems = collectionView.numberOfItems(inSection: 0)
-        var xOffset: CGFloat = 0
-        var yOffset: CGFloat = 0
-        let spacing: CGFloat = 8
+        
         
         for item in 0..<numberOfItems {
             let indexPath = IndexPath(item: item, section: 0)
-            let cellSize = (collectionView.delegate as? UICollectionViewDelegateFlowLayout)?.collectionView?(collectionView, layout: self, sizeForItemAt: indexPath) ?? CGSize(width: 50, height: 30)
+            let tag = dataSource?.tag(at: indexPath) ?? ""
+
+            let cellSize = tag.preferredSize(forFont: decorator.font,
+                                             horizontalPadding: decorator.horizontalPadding,
+                                             verticalPadding: decorator.verticalPadding)
             
             if xOffset + cellSize.width > collectionView.bounds.width {
                 xOffset = 0

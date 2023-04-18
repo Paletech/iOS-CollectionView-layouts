@@ -8,19 +8,20 @@ let package = Package(
     platforms: [
         .iOS(.v16)
     ],
+    
     products: [
-
         .library(
-            name: "Collection-View-Layouts",
-            targets: ["Collection-View-Layouts"]),
+            name: "Layouts",
+            targets: ["Layouts"]),
     ],
+    
     dependencies: [
 
     ],
+    
     targets: [
- 
         .target(
-            name: "Collection-View-Layouts",
-            dependencies: [])
+            name: "Layouts",
+            dependencies: []),
     ]
 )

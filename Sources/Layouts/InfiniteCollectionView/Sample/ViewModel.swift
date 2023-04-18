@@ -1,4 +1,3 @@
-import Collection_View_Layouts
 import Foundation
 
 class ViewModel {
@@ -7,19 +6,18 @@ class ViewModel {
     
     init() {}
     
-    func getFirstModel() -> Model<MChat, WaitingChatCell> {
-        let firstOne = Model(layout: Layout.firstSection(),
+    func getFirstModel() -> SectionDataSource<MChat, WaitingChatCell> {
+        let firstOne = SectionDataSource(layout: Layout.firstSection(),
                              data: sections[0].items,
-                             infinite: true,
+                             imitateInfinityCount: 10,
                              cell: WaitingChatCell.self) { item, cell in
                             cell.configure(with: item)}
         return firstOne
     }
     
-    func getSecondModel() -> Model<MChat, ActiveChatCell> {
-        let secondOne = Model(layout: Layout.secondSection(),
+    func getSecondModel() -> SectionDataSource<MChat, ActiveChatCell> {
+        let secondOne = SectionDataSource(layout: Layout.secondSection(),
                              data: sections[1].items,
-                             infinite: false,
                              cell: ActiveChatCell.self) { item, cell in
                             cell.configure(with: item)}
         return secondOne
